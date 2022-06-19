@@ -52,18 +52,21 @@ bool isi_cell(int baris, int kolom, int angka){
 
 //cek jika ada cell yang kosong (angka 0)
 bool cek_kotak_kosong(int &baris, int &kolom){
-  for(baris = 0; baris<UKURAN; ++baris)
-    for(kolom = 0; kolom<UKURAN; ++kolom)
-      if(sudoku[baris][kolom] == 0)
+  for(baris = 0; baris<UKURAN; ++baris){
+    for(kolom = 0; kolom<UKURAN; ++kolom){
+      if(sudoku[baris][kolom] == 0){
         return true;
-      return false;
+      }
+    }
+  }
+  return false;
 }
 
 bool sudoku_solver(){
   for(int baris{0}; baris < UKURAN; ++baris){
     for(int kolom{0}; kolom < UKURAN; ++kolom){
     	//jika ada angka 0 (kotak belum terisi)
-      if(sudoku[baris][kolom] == 0){
+      if(cek_kotak_kosong(baris,kolom)){
       	//isi dari angka 1 - 9
         for(int coba{1}; coba <= 9; ++coba){
         	//jika berhasil (cek dulu mulai dari kolom, baris dan kotak parsial)
@@ -71,6 +74,7 @@ bool sudoku_solver(){
           	//isi kotak tersebut dengan angka
             sudoku[baris][kolom] = coba;
 
+            //backtracking algorithm in action
             if(sudoku_solver()){
               return true;
             }else{
@@ -102,24 +106,18 @@ void print_sudoku(){
 	}
 }
 
-void show_index(){
-  for(int i{0}; i<UKURAN; ++i){
-    for(int j{0}; j<UKURAN; ++j){
-      std::cout<<'['<<i<<j<<']';
-    }
-    std::cout<<std::endl;
-  }
-}
 
 
 int main(int argc, char const *argv[])
 {
 	print_sudoku();
 	printf("\n\n\n");
-  	if(sudoku_solver() == true){
-	    print_sudoku();
-  	}else{
-	    std::cout<<":)"<<std::endl;
-  	}
-	  // show_index();
+
+
+	if(sudoku_solver() == true){
+    printf("Solved sudoku\n\n");
+    print_sudoku();
+	}else{
+    std::cout<<":)"<<std::endl;
+	}
 }
